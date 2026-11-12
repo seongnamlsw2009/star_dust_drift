@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>스타 더스트 드리프트</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="640" height="640"></canvas>
+
+  <div id="ui">
+    <!-- 타이틀 -->
+    <section id="s-title" class="screen">
+      <h1 class="logo">STAR DUST<br>DRIFT</h1>
+      <p class="tag">꺼져 가는 별들 사이를 가르는 탄막 회피 슈팅</p>
+      <div class="btns">
+        <button data-act="start" class="primary">시작</button>
+        <button data-act="ship">기체 · 스킬</button>
+        <button data-act="how">조작법</button>
+        <button data-act="log">업데이트 기록</button>
+        <button data-act="settings">설정</button>
+      </div>
+      <p class="hint">방향키/WASD 이동 · Shift 저속 · Space 대쉬 · Q 고유 스킬</p>
+      <div id="ver">V1.2.0</div>
+    </section>
+
+    <!-- 모드 선택 (시작 버튼 다음) -->
+    <section id="s-mode" class="screen">
+      <h2>모드 선택</h2>
+      <div id="mode-cards">
+        <button data-act="story" class="mcard"><span class="nm">스토리 모드</span><span class="ds">인류의 마지막 항성 솔라리스를 지키기 위한 노바의 출격 기록. 챕터마다 다른 적과 보스가 이야기를 이어 갑니다.</span></button>
+        <button data-act="challenge" class="mcard"><span class="nm">도전 모드</span><span class="ds">관제가 정예 파일럿에게만 허락하는 시험 비행. 잡병 없이 거대한 보스들만이 줄지어 길을 막습니다.</span></button>
+        <button data-act="endless" class="mcard"><span class="nm">무한 모드</span><span class="ds">꺼진 별들의 바다에는 끝이 없다. 쓰러질 때까지 이어지는 항해에서 닿을 수 있는 가장 먼 곳을 기록하세요.</span></button>
+        <button data-act="practice" class="mcard"><span class="nm">연습 모드</span><span class="ds">원하는 챕터·스테이지·웨이브·보스만 골라 반복 훈련합니다. 목숨이 줄지 않고 기록과 스킬 포인트는 남지 않습니다.</span></button>
+      </div>
+      <div class="btns row"><button data-act="title">뒤로</button></div>
+    </section>
+
+    <!-- 챕터 선택 (스토리 모드) -->
+    <section id="s-chapter" class="screen">
+      <h2>챕터 선택</h2>
+      <div id="chapter-cards"></div>
+      <div class="btns row"><button data-act="start">뒤로</button></div>
+    </section>
+
+    <!-- 기체 선택 -->
+    <section id="s-ship" class="screen">
+      <h2>기체 선택</h2>
+      <div id="ship-cards"></div>
+      <div class="btns row">
+        <button data-act="skills" class="primary">스킬 트리</button>
+        <button data-act="title">뒤로</button>
+      </div>
+    </section>
+
+    <!-- 기체 · 스킬 트리 -->
+    <section id="s-skills" class="screen">
+      <h2>기체 · 스킬</h2>
+      <div id="skill-tabs" class="chips"></div>
+      <p id="skill-pts" class="info"></p>
+      <div id="skill-card" class="skcard"></div>
+      <svg id="skill-svg" viewBox="0 0 640 350" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="skill-info" class="skinfo"></div>
+      <div class="btns row">
+        <button data-act="skillBuy" id="skill-buy" class="primary">활성화</button>
+        <button data-act="skillReset">전체 초기화</button>
+        <button data-act="skillsBack">뒤로</button>
+      </div>
+    </section>
+
+    <!-- 난이도 선택 -->
+    <section id="s-diff" class="screen">
+      <h2 id="diff-title">난이도 선택</h2>
+      <p id="diff-desc" class="info small"></p>
+      <div id="diff-cards"></div>
+      <div class="btns row"><button data-act="diffBack">뒤로</button></div>
+    </section>
+
+    <!-- 연습 모드 설정 -->
+    <section id="s-practice" class="screen">
+      <h2>연습 모드</h2>
+      <p class="info">원하는 구간만 골라 반복 연습합니다. 목숨이 줄지 않고 기록은 저장되지 않습니다.</p>
+      <div id="practice-form"></div>
+      <div class="btns row">
+        <button data-act="practiceStart" class="primary">연습 시작</button>
+        <button data-act="start">뒤로</button>
+      </div>
+    </section>
+
+    <!-- 조작법 -->
+    <section id="s-how" class="screen">
+      <h2>조작법</h2>
+      <table class="keys">
+        <tr><td>이동</td><td>방향키 / WASD</td><td>화면 드래그</td></tr>
+        <tr><td>저속 이동</td><td>Shift 누르는 동안</td><td>두 손가락 터치</td></tr>
+        <tr><td>대쉬</td><td>Space</td><td>DASH 버튼</td></tr>
+        <tr><td>고유 스킬</td><td>Q</td><td>SKILL 버튼</td></tr>
+        <tr><td>일시정지</td><td>ESC / P</td><td>일시정지 버튼</td></tr>
+        <tr><td>재시작</td><td>결과 화면에서 R</td><td>결과 화면 버튼</td></tr>
+        <tr><td>공격</td><td colspan="2">자동 연사</td></tr>
+      </table>
+      <ul class="notes">
+        <li>실제 피격 판정은 기체 중앙의 작은 점입니다. 저속 이동 시 표시됩니다.</li>
+        <li>기체마다 고유 스킬이 하나씩 있습니다. 쿨타임이 차면 사용할 수 있으며, 스킬 노드로 쿨타임·위력·지속 시간을 강화할 수 있습니다.</li>
+        <li>대쉬는 이동 방향으로 짧게 순간 이동하며 그동안 무적입니다. 스톡은 시간이 지나면 충전됩니다.</li>
+        <li>스테이지마다 5개 웨이브 후 중간보스가 등장하고, 처치하면 업그레이드를 고를 수 있습니다.</li>
+        <li>스토리 모드는 챕터 1(공허의 심장)·챕터 2(꺼지지 않는 잔해)·챕터 3(성좌의 회랑)로 나뉘며, 챕터마다 적·중간보스·최종보스가 다릅니다. 다음 챕터는 이전 챕터를 Normal 이상으로 클리어해야 열립니다.</li>
+        <li>Hard 이상 난이도에서는 각 챕터에 쉴드를 두른 강화 적이 추가됩니다. 쉴드를 먼저 부수어야 체력이 깎입니다.</li>
+        <li>도전 모드: 5웨이브가 모두 중간보스전이고 스테이지 끝에 최종보스가 나옵니다. 무한 모드: 쓰러질 때까지 반복되며 갈수록 강해집니다. 두 모드는 스킬 포인트를 주지 않습니다.</li>
+      </ul>
+      <div class="btns row"><button data-act="title">뒤로</button></div>
+    </section>
+
+    <!-- 업데이트 기록 -->
+    <section id="s-log" class="screen">
+      <h2>업데이트 기록</h2>
+      <div id="log-list"></div>
+      <div class="btns row"><button data-act="title">뒤로</button></div>
+    </section>
+
+    <!-- 설정 -->
+    <section id="s-settings" class="screen">
+      <h2>설정</h2>
+      <div class="form">
+        <label>효과음 <input type="range" id="v-sfx" min="0" max="1" step="0.05"></label>
+        <label>BGM <input type="range" id="v-bgm" min="0" max="1" step="0.05"></label>
+        <label class="chk"><input type="checkbox" id="o-shake"> 화면 흔들림</label>
+        <label class="chk"><input type="checkbox" id="o-cb"> 색약 모드 (탄 외곽선 강조)</label>
+        <label class="chk"><input type="checkbox" id="o-intro"> 인트로 건너뛰기</label>
+      </div>
+      <div class="btns row"><button data-act="title">뒤로</button></div>
+    </section>
+
+    <!-- 일시정지 -->
+    <section id="s-pause" class="screen dim">
+      <h2>일시정지</h2>
+      <p id="pause-info" class="info"></p>
+      <div class="btns">
+        <button data-act="resume" class="primary">계속하기</button>
+        <button data-act="restart">다시 시작</button>
+        <button data-act="title">타이틀로</button>
+      </div>
+    </section>
+
+    <!-- 업그레이드 선택 -->
+    <section id="s-upgrade" class="screen dim">
+      <h2>업그레이드 선택</h2>
+      <p class="info">중간보스를 처치했습니다. 기체를 강화하세요. (숫자 키 또는 클릭)</p>
+      <div id="up-cards"></div>
+    </section>
+
+    <!-- 결과 -->
+    <section id="s-result" class="screen dim">
+      <h2 id="r-title">STAGE CLEAR</h2>
+      <p id="r-diff" class="info"></p>
+      <table class="res" id="r-table"></table>
+      <p id="r-new" class="newrec"></p>
+      <p id="r-ups" class="info small"></p>
+      <div class="btns row">
+        <button data-act="retry" class="primary">다시 하기 (R)</button>
+        <button data-act="practice" id="r-practice-btn" style="display:none">연습 설정</button>
+        <button data-act="title">타이틀</button>
+      </div>
+    </section>
+
+    <!-- 시네마틱 스킵 안내 -->
+    <div id="skip-hint">Enter / 클릭 / 터치로 건너뛰기</div>
+  </div>
+
+  <!-- 모바일 버튼 -->
+  <button id="btn-dash" class="touch">DASH</button>
+  <button id="btn-skill" class="touch">SKILL</button>
+  <button id="btn-pause" class="touch">II</button>
+</div>
+
+<script src="js/difficulty.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ships.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/input.js"></script>
+<script src="js/story.js"></script>
+<script src="js/bullet.js"></script>
+<script src="js/patterns.js"></script>
+<script src="js/upgrades.js"></script>
+<script src="js/player.js"></script>
+<script src="js/enemy.js"></script>
+<script src="js/stages.js"></script>
+<script src="js/stages2.js"></script>
+<script src="js/stages3.js"></script>
+<script src="js/armored.js"></script>
+<script src="js/bosses.js"></script>
+<script src="js/bosses2.js"></script>
+<script src="js/bosses3.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
