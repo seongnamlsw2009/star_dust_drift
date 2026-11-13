@@ -153,3 +153,13 @@ button.ccard.locked, .chip.locked { opacity: 0.45; filter: grayscale(0.7); curso
 #log-list .lg { margin-bottom: calc(12 * var(--u)); padding-left: calc(10 * var(--u)); border-left: 3px solid #7fb8ff; }
 #log-list .lg b { color: #7fb8ff; font-size: calc(15 * var(--u)); }
 #log-list ul { margin: calc(4 * var(--u)) 0 0; padding-left: calc(18 * var(--u)); font-size: calc(12 * var(--u)); line-height: 1.55; color: #cfd8ff; }
+
+/* 계정 화면 */
+.form.acc { align-items: stretch; width: min(92%, calc(380 * var(--u))); }
+.form.acc label { justify-content: space-between; }
+.form.acc input[type=text], .form.acc input[type=password] {
+  font: inherit; font-size: calc(16 * var(--u)); width: calc(220 * var(--u)); padding: calc(6 * var(--u)) calc(10 * var(--u));
+  color: #e8ecff; background: rgba(10, 14, 40, .8); border: 1px solid #4a5590; border-radius: calc(6 * var(--u)); pointer-events: auto;
+}
+.form.acc input:focus { outline: 2px solid #8fa2ff; outline-offset: 1px; }
+#acc-status { min-height: 1.5em; }

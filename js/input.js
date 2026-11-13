@@ -9,6 +9,7 @@ const Input = {
 
   init(canvasEl) {
     window.addEventListener('keydown', e => {
+      if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName) && e.target.type !== 'range' && e.target.type !== 'checkbox') return; // 입력칸에서 타이핑할 때는 게임 키로 쓰지 않음
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
       if (!e.repeat) this.pressed[e.code] = true;
       this.keys[e.code] = true;

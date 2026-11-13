@@ -4,7 +4,7 @@
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
   const $ = id => document.getElementById(id);
-  const screens = ['title', 'mode', 'chapter', 'ship', 'skills', 'diff', 'practice', 'how', 'log', 'settings', 'pause', 'upgrade', 'result'];
+  const screens = ['title', 'mode', 'chapter', 'ship', 'skills', 'diff', 'practice', 'how', 'log', 'settings', 'account', 'pause', 'upgrade', 'result'];
 
   let state = 'TITLE';   // TITLE | DIFF | HOW | SETTINGS | INTRO | PLAYING | PAUSED | UPGRADE | OUTRO | RESULT
   let diffKey = 'normal';
@@ -63,6 +63,7 @@
       case 'HOW': show('how'); break;
       case 'LOG': buildLog(); show('log'); break;
       case 'SETTINGS': syncSettings(); show('settings'); break;
+      case 'ACCOUNT': Cloud.render(); show('account'); break;
       case 'INTRO': show(null); break;
       case 'PLAYING': show(null); break;
       case 'COUNT': show(null); break;
@@ -524,6 +525,7 @@
     skillReset: () => { Sound.play('click'); Ships.reset(skillShip); skillSel = null; renderSkills(); },
     how: () => { Sound.play('click'); setState('HOW'); },
     settings: () => { Sound.play('click'); setState('SETTINGS'); },
+    account: () => { Sound.play('click'); setState('ACCOUNT'); },
     practice: () => { Sound.init(); Sound.play('click'); setState('PRACTICE'); },
     practiceStart: () => { Sound.play('click'); startPracticeRun(); },
     title: () => { Sound.play('click'); Sound.init(); cine = null; Bullets.clear(); setState('TITLE'); },

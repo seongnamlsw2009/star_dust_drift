@@ -27,5 +27,6 @@ const Store = {
   },
   save() {
     try { localStorage.setItem(this.key, JSON.stringify(this.data)); } catch (e) { /* ignore */ }
+    if (typeof Cloud !== 'undefined') Cloud.schedule(); // 로그인해 있으면 서버에도 저장
   }
 };
